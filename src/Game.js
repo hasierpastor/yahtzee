@@ -7,6 +7,7 @@ const NUM_DICE = 5;
 const NUM_ROLLS = 3;
 let STARTING_DICE = createStartingDice();
 
+//function to create a random starting array of dice
 function createStartingDice() {
   let dice = [];
   for (let i = 0; i < NUM_DICE; i++) {
@@ -45,6 +46,7 @@ class Game extends Component {
     this.roll = this.roll.bind(this);
     this.doScore = this.doScore.bind(this);
     this.toggleLocked = this.toggleLocked.bind(this);
+
     //   this.addScores = this.addScores.bind(this);
   }
 
@@ -60,6 +62,8 @@ class Game extends Component {
       //subtrack 1 roll for every time you roll
       rollsLeft: st.rollsLeft - 1,
       ruleSelected: false,
+
+      //reset current score to 0 when dice are re-rolled
       currentScore: 0
     }));
   }
@@ -75,6 +79,7 @@ class Game extends Component {
     }));
   }
 
+  //function to loop through scores object and find sum scores - not working
   // addScores() {
   //   let sum = 0;
   //   for (let key in this.state.scores) {
@@ -91,8 +96,10 @@ class Game extends Component {
       //Update the score for this rule based off of the rule's method of scoring
       scores: { ...st.scores, [rulename]: ruleFn(this.state.dice) },
       rollsLeft: NUM_ROLLS
-      //Unlock all dice
-      // locked: Array(NUM_DICE).fill(false)
+
+      // locked: Array(NUM_DICE).fill(false) - this was here before but causing a bug in our application, when we clicked a rule all the dice would unlock
+
+      //set the currentScore and totalScore state - fix this
       // currentScore: this.addScores(),
       // totalScore: this.addScores()
     }));
