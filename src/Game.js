@@ -5,12 +5,22 @@ import './Game.css';
 
 const NUM_DICE = 5;
 const NUM_ROLLS = 3;
+let STARTING_DICE = createStartingDice();
+
+function createStartingDice() {
+  let dice = [];
+  for (let i = 0; i < NUM_DICE; i++) {
+    let randNum = Math.ceil(Math.random() * 6);
+    dice.push(randNum);
+  }
+  return dice;
+}
 
 class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dice: Array.from({ length: NUM_DICE }),
+      dice: STARTING_DICE,
       locked: Array(NUM_DICE).fill(false),
       rollsLeft: NUM_ROLLS,
       scores: {
