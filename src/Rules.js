@@ -71,15 +71,17 @@ class FullHouse extends Rule {
 class SmallStraight extends Rule {
   evalRoll = dice => {
     const d = new Set(dice);
-    let sortedArr = [...d].sort();
-    console.log('sortedArr', sortedArr);
+    let sortedArr = [...d].sort((a, b) => a - b);
+    let count = 0;
     for (let i = 0; i < sortedArr.length - 1; i++) {
-      if (sortedArr[i] + 1 !== sortedArr[i + 1]) {
-        return 0;
+      if (sortedArr[i] + 1 === sortedArr[i + 1]) {
+        count++;
       }
     }
-    console.log('this.score', this.score);
-    return this.score;
+    if (count === 4) {
+      return this.score;
+    }
+    return 0;
   };
 }
 
