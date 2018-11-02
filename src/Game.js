@@ -38,11 +38,14 @@ class Game extends Component {
         yahtzee: undefined,
         chance: undefined
       },
-      ruleSelected: false
+      ruleSelected: false,
+      currentScore: 0,
+      totalScore: 0
     };
     this.roll = this.roll.bind(this);
     this.doScore = this.doScore.bind(this);
     this.toggleLocked = this.toggleLocked.bind(this);
+    //   this.addScores = this.addScores.bind(this);
   }
 
   roll(evt) {
@@ -56,7 +59,8 @@ class Game extends Component {
       locked: st.rollsLeft > 1 ? st.locked : Array(NUM_DICE).fill(true),
       //subtrack 1 roll for every time you roll
       rollsLeft: st.rollsLeft - 1,
-      ruleSelected: false
+      ruleSelected: false,
+      currentScore: 0
     }));
   }
 
@@ -71,15 +75,26 @@ class Game extends Component {
     }));
   }
 
+  // addScores() {
+  //   let sum = 0;
+  //   for (let key in this.state.scores) {
+  //     if (this.state.scores[key] !== undefined) {
+  //       sum += this.state.score[key];
+  //     }
+  //   }
+  //   return sum;
+  // }
+
   async doScore(rulename, ruleFn) {
     // evaluate this ruleFn with the dice and score this rulename
-    await this.setState(st => ({
+    this.setState(st => ({
       //Update the score for this rule based off of the rule's method of scoring
       scores: { ...st.scores, [rulename]: ruleFn(this.state.dice) },
-      rollsLeft: NUM_ROLLS,
-      //^should this be minus 1
+      rollsLeft: NUM_ROLLS
       //Unlock all dice
-      locked: Array(NUM_DICE).fill(false)
+      // locked: Array(NUM_DICE).fill(false)
+      // currentScore: this.addScores(),
+      // totalScore: this.addScores()
     }));
     //is this a bug?
     this.roll();
@@ -108,6 +123,11 @@ class Game extends Component {
           scores={this.state.scores}
           ruleSelected={this.state.ruleSelected}
         />
+        <div>
+          <br />
+          <div>Current Score: {this.state.currentScore}</div>
+          <div>Total Score: {this.state.totalScore}</div>
+        </div>
       </section>
     );
   }
