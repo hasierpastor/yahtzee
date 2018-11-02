@@ -6,7 +6,11 @@ class Rule extends Component {
     return (
       <tr
         className="Rule Rule-active"
-        onClick={this.props.score === undefined ? this.props.doScore : null}
+        onClick={
+          this.props.score === undefined && this.props.ruleSelected === false
+            ? this.props.doScore
+            : null
+        }
       >
         <td className="Rule-name">{this.props.name}</td>
         <td className="Rule-score">{this.props.score}</td>

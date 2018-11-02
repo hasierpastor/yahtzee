@@ -27,7 +27,8 @@ class Game extends Component {
         largeStraight: undefined,
         yahtzee: undefined,
         chance: undefined
-      }
+      },
+      ruleSelected: false
     };
     this.roll = this.roll.bind(this);
     this.doScore = this.doScore.bind(this);
@@ -44,12 +45,12 @@ class Game extends Component {
       // If you have remaining rolls, keep the locked state, otherwise lock all of them
       locked: st.rollsLeft > 1 ? st.locked : Array(NUM_DICE).fill(true),
       //subtrack 1 roll for every time you roll
-      rollsLeft: st.rollsLeft - 1
+      rollsLeft: st.rollsLeft - 1,
+      ruleSelected: false
     }));
   }
 
   toggleLocked(idx) {
-    console.log(idx);
     // toggle whether idx is in locked or not
     this.setState(st => ({
       locked: [
@@ -60,9 +61,9 @@ class Game extends Component {
     }));
   }
 
-  doScore(rulename, ruleFn) {
+  async doScore(rulename, ruleFn) {
     // evaluate this ruleFn with the dice and score this rulename
-    this.setState(st => ({
+    await this.setState(st => ({
       //Update the score for this rule based off of the rule's method of scoring
       scores: { ...st.scores, [rulename]: ruleFn(this.state.dice) },
       rollsLeft: NUM_ROLLS,
@@ -70,7 +71,11 @@ class Game extends Component {
       //Unlock all dice
       locked: Array(NUM_DICE).fill(false)
     }));
+    //is this a bug?
     this.roll();
+    await this.setState(st => ({
+      ruleSelected: true
+    }));
   }
 
   render() {
@@ -88,7 +93,11 @@ class Game extends Component {
         >
           {this.state.rollsLeft} Rerolls Left
         </button>
-        <Scoring doScore={this.doScore} scores={this.state.scores} />
+        <Scoring
+          doScore={this.doScore}
+          scores={this.state.scores}
+          ruleSelected={this.state.ruleSelected}
+        />
       </section>
     );
   }
